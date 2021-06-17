@@ -6,8 +6,8 @@ fastify.get('/', async (request, reply) => {
   return { hello: 'world' }
 })
 
-fastify.get('/bla', async (request, reply) => {
-  return { msg: 'blabla' }
+fastify.get('/bli', async (request, reply) => {
+  return { msg: 'blibli' }
 })
 
 fastify.get('/ble', async (request, reply) => {
