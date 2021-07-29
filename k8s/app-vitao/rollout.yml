@@ -1,0 +1,111 @@
+# CUIDADO: as imagens rodadas aqui são da aplicação do repositório do Erich
+# https://github.com/erichegt/workshop-k8s-helm-istio
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: app-vitao-1
+  labels:
+    app: app-vitao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      rs: app-vitao-1
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: app-vitao
+        svc: app-vitao
+        rs: app-vitao-1
+    spec:
+      containers:
+        - name: app
+          image: erichegt/hello-istio:0.1
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # downward API
+            - name: POD_PORT
+              value: '3000'
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /chain
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-vitao
+  labels:
+    env: dev
+    app: app-vitao
+spec:
+  selector:
+    svc: app-vitao
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+
+---
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: app-vitao-2
+  labels:
+    app: app-vitao
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      rs: app-vitao-2
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: app-vitao
+        rs: app-vitao-2
+        svc: app-vitao
+    spec:
+      containers:
+        - name: app
+          image: erichegt/hello-istio:0.2
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # downward API
+            - name: POD_PORT
+              value: '3000'
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /chain
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3

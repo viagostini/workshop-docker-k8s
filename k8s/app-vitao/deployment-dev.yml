@@ -1,0 +1,74 @@
+# CUIDADO: as imagens rodadas aqui são da aplicação do repositório do Erich
+# https://github.com/erichegt/workshop-k8s-helm-istio
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-vitao
+  labels:
+    app: app-vitao
+spec:
+  replicas: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: app-vitao
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: app-vitao
+    spec:
+      containers:
+        - name: app
+          image: erichegt/hello-istio:0.6
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # downward API
+            - name: POD_PORT
+              value: '3000'
+          # resources:
+            # limits:
+              # cpu: 500m
+              # memory: 1Gi
+            # requests:
+              # cpu: 100m
+              # memory: 200Mi
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /chain
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-vitao
+  labels:
+    env: dev
+    app: app-vitao
+    version: "6"
+spec:
+  selector:
+    app: app-vitao
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

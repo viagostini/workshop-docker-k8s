@@ -1,0 +1,84 @@
+# CUIDADO: as imagens rodadas aqui são da aplicação do repositório do Erich
+# https://github.com/erichegt/workshop-k8s-helm-istio
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-vitao
+  labels:
+    env: dev
+    app: app-vitao
+    svc: app-vitao
+    rc: app-vitao
+spec:
+  containers:
+    - name: app
+      image: erichegt/hello-istio:0.1
+      env:
+        - name: POD_NAME
+          value: dev-maroto
+        - name: POD_PORT
+          value: "3000"
+      ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP
+      livenessProbe:
+        httpGet:
+          path: /chain
+          port: 3000
+        initialDelaySeconds: 3
+        periodSeconds: 3
+
+# ---
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+  # name: app-vitao-2
+  # labels:
+    # env: dev
+    # app: app-vitao
+# spec:
+  # containers:
+    # - name: app
+      # image: erichegt/hello-istio:0.1
+      # env:
+        # - name: POD_NAME
+          # value: dev-maroto-2
+      # ports:
+        # - name: web
+          # containerPort: 3000
+          # protocol: TCP
+      # livenessProbe:
+        # httpGet:
+          # path: /chain
+          # port: 3000
+        # initialDelaySeconds: 3
+        # periodSeconds: 3
+# ---
+#
+# apiVersion: v1
+# kind: Pod
+# metadata:
+  # name: app-vitao-3
+  # labels:
+    # env: dev
+    # app: app-vitao
+# spec:
+  # containers:
+    # - name: app
+      # image: erichegt/hello-istio:0.1
+      # env:
+        # - name: POD_NAME
+          # value: dev-maroto-2
+      # ports:
+        # - name: web
+          # containerPort: 3000
+          # protocol: TCP
+      # livenessProbe:
+        # httpGet:
+          # path: /chain
+          # port: 3000
+        # initialDelaySeconds: 3
+        # periodSeconds: 3

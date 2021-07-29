@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    env: dev
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-ana
+  labels:
+    env: dev
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-vitor
+  labels:
+    env: dev
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod
+  labels:
+    env: prod
