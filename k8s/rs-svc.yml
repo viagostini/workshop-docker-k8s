@@ -1,3 +1,6 @@
+# CUIDADO: as imagens rodadas aqui são da aplicação do repositório do Erich
+# https://github.com/erichegt/workshop-k8s-helm-istio
+
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:

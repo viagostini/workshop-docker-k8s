@@ -1,3 +1,6 @@
+# CUIDADO: as imagens rodadas aqui são da aplicação do repositório do Erich
+# https://github.com/erichegt/workshop-k8s-helm-istio
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +8,11 @@ metadata:
   labels:
     app: app-vitao
 spec:
-  replicas: 3
+  replicas: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: app-vitao
@@ -17,7 +24,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: erichegt/hello-istio:0.2
+          image: erichegt/hello-istio:0.4
           env:
             - name: POD_NAME
               valueFrom:
