@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: erichegt/hello-istio
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -16,6 +16,7 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 80
+  targetPort: 3000
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
